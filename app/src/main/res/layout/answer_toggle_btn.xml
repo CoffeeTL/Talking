@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/answer_toggle_btn_main"
+                android:background="@drawable/normal_bg"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_width="600dp"
+                android:layout_height="100dp">
+        <ImageView
+            android:id="@+id/answer_toggle_btn_main_answeriv"
+            android:src="@mipmap/call_answer"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
+        <ImageView
+            android:id="@+id/answer_toggle_btn_main_rejectiv"
+            android:src="@mipmap/call_reject"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
+        <ImageView
+            android:id="@+id/answer_toggle_btn_main_toggleiv"
+            android:src="@mipmap/toggle"
+            android:layout_centerVertical="true"
+            android:layout_width="120dp"
+            android:layout_height="80dp"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:background="#ffffff"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/activity_calling_edit"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:hint="Input the IP address you want to call"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/activity_calling_btn_call"
+        android:text="Call"
+        android:layout_below="@+id/activity_calling_edit"
+        android:layout_alignLeft="@+id/activity_calling_edit"
+        android:layout_marginTop="30dp"
+        android:textColor="#565656"
+        android:layout_width="100dp"
+        android:layout_height="60dp"/>
+
+
+
+</RelativeLayout>
