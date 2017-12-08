@@ -22,10 +22,15 @@ import java.net.Socket;
  */
 
 public class CallingServer extends Thread {
-    private Handler handler;
     private boolean flag;
-    public CallingServer(Handler handler){
-        this.handler = handler;
+    private TalkServerListener talkServerListener;
+    private String serverIp;
+    private String localIp;
+    public void registerTalkListener(TalkServerListener talkServerListener){
+        this.talkServerListener = talkServerListener;
+    }
+    public CallingServer(){
+
     }
     public void listen(boolean flag){
         this.flag = flag;
@@ -44,11 +49,10 @@ public class CallingServer extends Thread {
         ByteArrayOutputStream bos = null;
         try {
             Socket socket = TCPServerManager.getInstance().get().accept();
-            socket.setSendBufferSize(DataConst.TCP_SEND_MAX_SIZE);
-            socket.setSoTimeout(DataConst.TCP_SEND_TIMEOUT);
-            socket.setTcpNoDelay(true);
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
+            serverIp = socket.getInetAddress().getHostName();
+            localIp = socket.getLocalAddress().getHostName();
             bos = new ByteArrayOutputStream();
             int size = inputStream.available();
             byte[] temp = new byte[size];
@@ -67,13 +71,13 @@ public class CallingServer extends Thread {
     private void doWithRequest(byte[] bb, OutputStream outputStream) {
         try {
             String request = new String(bb,"utf-8");
-            Log.i("callingService","request : "+request);
+            Log.i("callingService","request : "+request+" serverIp : "+serverIp);
             CmdModel model = GsonHolder.get().fromJson(request,new TypeToken<CmdModel>(){}.getType());
-            Message message = new Message();
-            message.what = model.getCmd();
-            message.obj = request;
-            handler.sendMessage(message);
+            model.setServerIp(serverIp);
+            String toclient = GsonHolder.get().toJson(model);
+            talkServerListener.receiveTalkMsg(toclient);
 
+            model.setServerIp(localIp);
             model.setSerial(1);
             String response = GsonHolder.get().toJson(model);
             byte[] resbyte = response.getBytes("utf-8");
@@ -84,5 +88,8 @@ public class CallingServer extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public interface TalkServerListener{
+        void receiveTalkMsg(String receiveFromCaller);
     }
 }

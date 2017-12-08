@@ -35,6 +35,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.TalkingActivity"/>
+        <service android:name=".task.LaunchService" />
+        <receiver android:name=".base.LaunchReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

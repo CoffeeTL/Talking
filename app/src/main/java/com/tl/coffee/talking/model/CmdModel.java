@@ -7,6 +7,7 @@ package com.tl.coffee.talking.model;
 public class CmdModel {
     private int cmd;
     private int serial;
+    private String serverIp;
 
     public int getCmd() {
         return cmd;
@@ -22,5 +23,13 @@ public class CmdModel {
 
     public void setSerial(int serial) {
         this.serial = serial;
+    }
+
+    public String getServerIp() {
+        return serverIp;
+    }
+
+    public void setServerIp(String serverIp) {
+        this.serverIp = serverIp;
     }
 }

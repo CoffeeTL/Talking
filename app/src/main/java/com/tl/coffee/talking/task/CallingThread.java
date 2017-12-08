@@ -22,9 +22,11 @@ import java.net.Socket;
 public class CallingThread extends Thread {
     private String serverIp;
     private String data;
-    private Handler handler;
-    public CallingThread(Handler handler){
-        this.handler = handler;
+    private CallerCallback listener;
+    public void setCallerCallback(CallerCallback listener){
+        this.listener = listener;
+    }
+    public CallingThread(){
     }
     public void init(String serverIp,String data){
         this.serverIp = serverIp;
@@ -75,14 +77,12 @@ public class CallingThread extends Thread {
         try {
             String msg = new String(bb,"utf-8");
             Log.i("callingService","cmd : "+msg);
-            CmdModel model = GsonHolder.get().fromJson(msg,new TypeToken<CmdModel>(){}.getType());
-            Log.i("callingService","cmd : "+model.getCmd()+" serial : "+model.getSerial());
-            Message message = new Message();
-            message.what = model.getCmd();
-            message.obj = msg;
-            handler.sendMessage(message);
+            listener.callback(msg);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+    public interface CallerCallback{
+        void callback(String response);
     }
 }

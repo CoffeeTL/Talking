@@ -17,6 +17,11 @@ public class DataConst {
     public static final int TCP_SEND_TIMEOUT = 6 * 1000;
 
     public static final int CMD_CALLING = 100;
+    public static final int CMD_CALLER_CANCEL_WITHOUT_TALKING = 101;
+    public static final int CMD_RECEIVER_CANCEL_WITHOUT_TALKING = 102;
+    public static final int CMD_CALLER_CANCEL_WHEN_TALKING = 103;
+    public static final int CMD_RECEIVER_CANCEL_WHEN_TALKING = 104;
+    public static final int CMD_RECEIVER_PICKUP_AND_TALK = 105;
 
     public final static int AUDIO_SOURCE = MediaRecorder.AudioSource.MIC;
     public final static int AUDIO_STREAM_TYPE = AudioManager.STREAM_MUSIC;
