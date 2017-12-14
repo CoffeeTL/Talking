@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Talking</string>
+
+    <string name="caller_begin_to_call">Calling</string>
+    <string name="receiver_receive_call">You got a call</string>
+    <string name="caller_hangUp_without_talking">Hang up</string>
+    <string name="receiver_hangUp_by_caller_without_talking">the caller has canceled the call</string>
+    <string name="receiver_hangUp_without_talking">You have hung up the call</string>
+    <string name="caller_hangUp_by_receiver_without_talking">Your call has been hung up</string>
+    <string name="caller_hangUp_when_talking">Hang up</string>
+    <string name="receiver_hangUp_by_caller_when_talking">the caller has canceled the call</string>
+    <string name="receiver_hangUp_when_talking">You have hung up the call</string>
+    <string name="caller_hangUp_by_receiver_when_talking">Your call has been hung up</string>
+    <string name="receiver_answer_the_call">Talking</string>
 </resources>

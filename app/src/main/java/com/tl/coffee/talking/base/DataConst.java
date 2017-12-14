@@ -10,6 +10,11 @@ import android.media.MediaRecorder;
  */
 
 public class DataConst {
+    // 组播端口号
+    public static final int MULTI_BROADCAST_PORT = 57333;
+    // 组播地址
+    public static final String MULTI_BROADCAST_IP = "224.9.9.9";
+
     public static final int PORT_CALLING = 58000;
     public static final int PORT_TALKING = 56001;
 

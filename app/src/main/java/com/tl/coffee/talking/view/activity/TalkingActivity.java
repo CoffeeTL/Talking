@@ -29,6 +29,8 @@ import com.tl.coffee.talking.view.ui.AnswerToggleBtn;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
@@ -36,11 +38,11 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  */
 
 public class TalkingActivity extends BaseActivity implements ITalkingBinder,CallingServer.TalkServerListener{
-    private ImageView bg_iv;
-    private TextView tv_name;
-    private TextView tv_state;
-    private TextView tv_hungUp;
-    private AnswerToggleBtn toggleBtn;
+    @BindView(R.id.activity_talking_bgiv) ImageView bg_iv;
+    @BindView(R.id.activity_talking_name) TextView tv_name;
+    @BindView(R.id.activity_talking_state) TextView tv_state;
+    @BindView(R.id.activity_talking_hangup_btn) TextView tv_hungUp;
+    @BindView(R.id.activity_talking_togglebtn) AnswerToggleBtn toggleBtn;
     private int serial;
     private String serverIp;
     private TalkingPresenter talkingPresenter;
@@ -61,7 +63,7 @@ public class TalkingActivity extends BaseActivity implements ITalkingBinder,Call
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taiking);
-        bindView();
+        ButterKnife.bind(this);
         initView();
     }
 
@@ -76,10 +78,10 @@ public class TalkingActivity extends BaseActivity implements ITalkingBinder,Call
         Glide.with(this).load(R.mipmap.calling_bg).crossFade(500).bitmapTransform(new BlurTransformation(this,23,4)).into(bg_iv);
         tv_name.setText(serverIp);
         if(1 == serial){
-            tv_state.setText("Calling...");
+            tv_state.setText(R.string.caller_begin_to_call);
             hideToggleBtn();
         }else{
-            tv_state.setText("You got a call...");
+            tv_state.setText(R.string.receiver_receive_call);
             hideHungBtn();
             toggleBtn.setOnToggleListener(new AnswerToggleBtn.ToggleListener() {
                 @Override
@@ -106,28 +108,12 @@ public class TalkingActivity extends BaseActivity implements ITalkingBinder,Call
     private void hideToggleBtn() {
         if(tv_hungUp.getVisibility() == View.GONE) tv_hungUp.setVisibility(View.VISIBLE);
         if(toggleBtn.getVisibility() == View.VISIBLE) toggleBtn.setVisibility(View.GONE);
-        tv_hungUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(1 == serial){
-                    if(!isTalking){
-                        talkingPresenter.sendRequest(serverIp, DataConst.CMD_CALLER_CANCEL_WITHOUT_TALKING,0);
-                    }else{
-                        talkingPresenter.sendRequest(serverIp, DataConst.CMD_CALLER_CANCEL_WHEN_TALKING,0);
-                    }
-                }else if(0 == serial){
-                    talkingPresenter.sendRequest(serverIp, DataConst.CMD_RECEIVER_CANCEL_WHEN_TALKING,0);
-                }
-            }
+        tv_hungUp.setOnClickListener(v -> {
+            if(1 == serial){
+                if(!isTalking) talkingPresenter.sendRequest(serverIp, DataConst.CMD_CALLER_CANCEL_WITHOUT_TALKING,0);
+                else talkingPresenter.sendRequest(serverIp, DataConst.CMD_CALLER_CANCEL_WHEN_TALKING,0);
+            }else if(0 == serial) talkingPresenter.sendRequest(serverIp, DataConst.CMD_RECEIVER_CANCEL_WHEN_TALKING,0);
         });
-    }
-
-    private void bindView() {
-        bg_iv = findViewById(R.id.activity_talking_bgiv);
-        tv_name = findViewById(R.id.activity_talking_name);
-        tv_state = findViewById(R.id.activity_talking_state);
-        tv_hungUp = findViewById(R.id.activity_talking_hangup_btn);
-        toggleBtn = findViewById(R.id.activity_talking_togglebtn);
     }
 
     @Override
@@ -179,27 +165,27 @@ public class TalkingActivity extends BaseActivity implements ITalkingBinder,Call
     private void dealWithMsg(CmdModel model){
         switch(model.getCmd()){
             case DataConst.CMD_CALLER_CANCEL_WITHOUT_TALKING:
-                if(1 == model.getSerial()) tv_state.setText("Hang up");
-                else if(0 == model.getSerial()) tv_state.setText("the caller has canceled the call");
+                if(1 == model.getSerial()) tv_state.setText(R.string.caller_hangUp_without_talking);
+                else if(0 == model.getSerial()) tv_state.setText(R.string.receiver_hangUp_by_caller_without_talking);
                 finishPage();
                 break;
             case DataConst.CMD_RECEIVER_CANCEL_WITHOUT_TALKING:
-                if(1 == model.getSerial()) tv_state.setText("You have hung up the call");
-                else if(0 == model.getSerial())tv_state.setText("Your call has been hung up");
+                if(1 == model.getSerial()) tv_state.setText(R.string.receiver_hangUp_without_talking);
+                else if(0 == model.getSerial())tv_state.setText(R.string.caller_hangUp_by_receiver_without_talking);
                 finishPage();
                 break;
             case DataConst.CMD_CALLER_CANCEL_WHEN_TALKING:
-                if(1 == model.getSerial()) tv_state.setText("Hang up");
-                else if(0 == model.getSerial()) tv_state.setText("the caller has canceled the call");
+                if(1 == model.getSerial()) tv_state.setText(R.string.caller_hangUp_when_talking);
+                else if(0 == model.getSerial()) tv_state.setText(R.string.receiver_hangUp_by_caller_when_talking);
                 finishPage();
                 break;
             case DataConst.CMD_RECEIVER_CANCEL_WHEN_TALKING:
-                if(1 == model.getSerial()) tv_state.setText("You have hung up the call");
-                else if(0 == model.getSerial())tv_state.setText("Your call has been hung up");
+                if(1 == model.getSerial()) tv_state.setText(R.string.receiver_hangUp_when_talking);
+                else if(0 == model.getSerial())tv_state.setText(R.string.caller_hangUp_by_receiver_when_talking);
                 finishPage();
                 break;
             case DataConst.CMD_RECEIVER_PICKUP_AND_TALK:
-                tv_state.setText("Talking...");
+                tv_state.setText(R.string.receiver_answer_the_call);
                 talkingClient = new TalkingClient();
                 talkingClient.init(model.getServerIp());
                 talkingClient.start();
